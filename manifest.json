@@ -2,9 +2,8 @@
   "manifest_version": 3,
   "name": "<name>",
   "version": "0.0.0",
-  "background": {
-    "service_worker": "src/pages/background/index.ts",
-    "type": "module"
+  "icons": {
+    "128": "icon-128.png"
   },
   "action": {
     "default_popup": "src/pages/popup/index.html",
@@ -12,14 +11,11 @@
       "32": "icon-32.png"
     }
   },
-  "icons": {
-    "128": "icon-128.png"
-  },
-  "permissions": ["activeTab"],
-  "host_permissions": ["https://www.youtube.com/*"],
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": ["https://www.youtube.com/watch*"],
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*", "<all_urls>"],
+      "matches": ["*://*.youtube.com/*"],
       "js": ["src/pages/content/index.tsx"],
       "css": ["contentStyle.css"]
     }

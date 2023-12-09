@@ -1,4 +1,3 @@
-import { createRoot } from 'react-dom/client';
 import { StorageUtils } from '@src/utils/StorageUtils';
 import './style.css';
 
@@ -7,19 +6,69 @@ function render() {
   div.id = '__root';
   document.body.appendChild(div);
 
-  const rootContainer = document.querySelector('#__root');
-  if (!rootContainer) throw new Error("Can't find Options root element");
-  const root = createRoot(rootContainer);
+  const videoElement = document.querySelector('video');
+  if (!videoElement) throw new Error("Can't find video element");
 
-  root.render(
-    <div className="absolute top-0 left-0 text-lg text-black bg-amber-400 z-50">
-      {`Your current speed is : ${StorageUtils.getSpeed()}x`}
-    </div>
-  );
+  // Create a custom div element for displaying the speed
+  const customDiv = document.createElement('div');
+  customDiv.style.position = 'absolute';
+  customDiv.style.top = '0';
+  customDiv.style.left = '0';
+  customDiv.style.zIndex = '50';
+  customDiv.id = 'speedDisplay'; // Set an ID for easy reference
+  customDiv.innerText = `Your current speed is: ${StorageUtils.getSpeed()}x`;
+
+  // Append the custom div to the videoElement's parent
+  videoElement.parentNode?.appendChild(customDiv);
+
+  // Listen for the 'ratechange' event on the video element
+  videoElement.addEventListener('ratechange', function () {
+    // Update the displayed speed when the playback speed changes
+    const speedDisplay = document.getElementById('speedDisplay');
+    if (speedDisplay) {
+      speedDisplay.innerText = `Your current speed is: ${videoElement.playbackRate}x`;
+    }
+  });
+}
+
+function playbackRateInit() {
+  // Create a MutationObserver instance
+  const observer = new MutationObserver((mutationsList) => {
+    for (const mutation of mutationsList) {
+      // Check if the mutation involves attributes or properties of the video element
+      if (mutation.type === 'attributes' && mutation.attributeName === 'src') {
+        // Video source changed, reattach the playback rate listener
+        attachPlaybackRateListener();
+      }
+    }
+  });
+
+  // Function to monitor changes in playbackRate
+  function attachPlaybackRateListener() {
+    const video = document.querySelector('video');
+
+    if (video) {
+      const rateChangeHandler = function () {
+        console.log('Playback rate changed:', video.playbackRate);
+        localStorage.setItem('speed', video.playbackRate.toString());
+      };
+
+      video.addEventListener('ratechange', rateChangeHandler);
+    }
+  }
+
+  // Start observing changes in the video element
+  const targetVideo = document.querySelector('video');
+  if (targetVideo) {
+    attachPlaybackRateListener();
+    observer.observe(targetVideo, { attributes: true });
+  }
 }
 
 try {
+  playbackRateInit();
   render();
+  console.log('rendered');
 } catch (e) {
   console.error(e);
 }

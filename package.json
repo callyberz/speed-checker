@@ -2,7 +2,7 @@
   "name": "speed-checker",
   "displayName": "Check your YouTube playback speed",
   "version": "1.1.0",
-  "description": "A simple chrome extension template with Vite, React, TypeScript and Tailwind CSS.",
+  "description": "Easily check your YouTube playback speed with this extension.",
   "license": "MIT",
   "repository": {
     "type": "git",

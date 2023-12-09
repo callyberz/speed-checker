@@ -7,7 +7,10 @@ function render() {
   document.body.appendChild(div);
 
   const videoElement = document.querySelector('video');
-  if (!videoElement) throw new Error("Can't find video element");
+  if (!videoElement) {
+    console.error('video element not found');
+    return;
+  }
 
   // Create a custom div element for displaying the speed
   const customDiv = document.createElement('div');
@@ -64,6 +67,19 @@ function playbackRateInit() {
     observer.observe(targetVideo, { attributes: true });
   }
 }
+
+// Monitor URL changes and send a message to the background script
+function checkURLChange() {
+  const newURL = window.location.href;
+  if (newURL !== currentURL) {
+    currentURL = newURL;
+    render();
+  }
+}
+
+// Set up interval to check for URL changes
+let currentURL = window.location.href;
+setInterval(checkURLChange, 500);
 
 try {
   playbackRateInit();

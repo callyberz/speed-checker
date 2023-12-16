@@ -4,25 +4,28 @@ import './style.css';
 function renderSpeedDisplay(videoElement: HTMLVideoElement) {
   const speedDisplay = document.getElementById('speedDisplay');
   if (speedDisplay) {
-    return;
+    speedDisplay.remove();
   }
 
   const customDiv = document.createElement('div');
-  customDiv.style.position = 'absolute';
-  customDiv.style.top = '0';
-  customDiv.style.left = '0';
-  customDiv.style.zIndex = '50';
+  customDiv.style.cssText = `
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 50;
+  `;
   customDiv.id = 'speedDisplay';
-  customDiv.innerText = `Your current speed is: ${StorageUtils.getSpeed()}x`;
+  customDiv.textContent = `Your current speed is: ${StorageUtils.getSpeed()}x`;
+
+  const updateSpeed = () => {
+    const display = document.getElementById('speedDisplay');
+    if (display) {
+      display.textContent = `Your current speed is: ${videoElement.playbackRate}x`;
+    }
+  };
 
   videoElement.parentNode?.appendChild(customDiv);
-
-  videoElement.addEventListener('ratechange', function () {
-    const speedDisplay = document.getElementById('speedDisplay');
-    if (speedDisplay) {
-      speedDisplay.innerText = `Your current speed is: ${videoElement.playbackRate}x`;
-    }
-  });
+  videoElement.addEventListener('ratechange', updateSpeed);
 }
 
 function observeVideoChanges() {
@@ -40,21 +43,23 @@ function observeVideoChanges() {
     }
   });
 
-  const targetNode = document.documentElement;
-  observer.observe(targetNode, { subtree: true, attributes: true });
+  observer.observe(document.documentElement, {
+    subtree: true,
+    attributes: true
+  });
 }
 
 function initializeExtension() {
-  observeVideoChanges();
-  const videoElement = document.querySelector('video');
-  if (videoElement) {
-    renderSpeedDisplay(videoElement);
+  try {
+    observeVideoChanges();
+    const videoElement = document.querySelector('video');
+    if (videoElement) {
+      renderSpeedDisplay(videoElement);
+    }
+    console.log('Extension initialized');
+  } catch (error) {
+    console.error('Error initializing extension:', error);
   }
 }
 
-try {
-  initializeExtension();
-  console.log('Extension initialized');
-} catch (e) {
-  console.error('Error initializing extension:', e);
-}
+initializeExtension();

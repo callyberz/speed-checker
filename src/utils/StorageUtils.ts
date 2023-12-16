@@ -12,7 +12,18 @@ function getSpeed() {
   return getStorage(YT_PLAYBACK_RATE_KEY)?.data || 1;
 }
 
+function setSpeed(speed: number): void {
+  sessionStorage.setItem(
+    YT_PLAYBACK_RATE_KEY,
+    JSON.stringify({
+      data: speed.toString(),
+      creation: Date.now().toString()
+    })
+  );
+}
+
 export const StorageUtils = {
   getSpeed,
-  getStorage
+  getStorage,
+  setSpeed
 };

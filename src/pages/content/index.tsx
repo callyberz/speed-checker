@@ -15,7 +15,10 @@ function renderSpeedDisplay(videoElement: HTMLVideoElement) {
     z-index: 50;
   `;
   customDiv.id = 'speedDisplay';
-  customDiv.textContent = `Your current speed is: ${StorageUtils.getSpeed()}x`;
+  customDiv.innerHTML = `
+  <p>Your current speeddddd is: ${StorageUtils.getSpeed()}x</p>
+  <button id="normalButton">Normal</button>
+`;
 
   const updateSpeed = () => {
     const display = document.getElementById('speedDisplay');
@@ -25,6 +28,18 @@ function renderSpeedDisplay(videoElement: HTMLVideoElement) {
   };
 
   videoElement.parentNode?.appendChild(customDiv);
+
+  const normalButton = document.getElementById('normalButton');
+
+  normalButton?.addEventListener('click', () => {
+    // console.log('click normal button');
+    alert('click normal buttonGG');
+    videoElement.playbackRate = 1;
+    updateSpeed();
+    StorageUtils.setSpeed(1);
+    location.reload();
+  });
+
   videoElement.addEventListener('ratechange', updateSpeed);
 }
 

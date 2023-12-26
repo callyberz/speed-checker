@@ -17,7 +17,6 @@ function renderSpeedDisplay(videoElement: HTMLVideoElement) {
   customDiv.id = 'speedDisplay';
   customDiv.innerHTML = `
   <p>Your current speed is: ${StorageUtils.getSpeed()}x</p>
-  <button id="normalButton">Normal</button>
 `;
 
   const updateSpeed = () => {

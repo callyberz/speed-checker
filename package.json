@@ -1,7 +1,7 @@
 {
   "name": "speed-checker",
   "displayName": "YouTube Playback Speed Master",
-  "version": "1.1.0",
+  "version": "1.0.1",
   "description": "Easily check your YouTube playback speed with this extension.",
   "license": "MIT",
   "repository": {

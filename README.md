@@ -21,6 +21,7 @@ You notice the speed seems a bit off when listening music on Youtube? Keep your 
 ## TODOs
 
 - [x] Implement logic to fetch and display the current playback speed.
+- [x] Add button to set the playback speed to 1x.
 - [ ] Add hotkeys to toggle between different playback speeds.
 - [ ] Add hotkeys to speed up and slow down the playback speed when the hotkey is longpressed.
 - [ ] Add a feature to customize the appearance of the playback speed display.
